@@ -192,10 +192,49 @@
       .nav-toggle {
         display: none;
         background: none;
-        border: none;
+        border: 1px solid var(--line-strong);
+        border-radius: 6px;
         color: var(--paper);
-        font-size: 22px;
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
         cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .nav-toggle:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      /* mobile dropdown menu (hidden by default, shown only on mobile via media query) */
+      .nav-mobile-menu {
+        display: none;
+        flex-direction: column;
+        background: rgba(14, 43, 52, 0.97);
+        backdrop-filter: blur(14px) saturate(140%);
+        border-bottom: 1px solid var(--line);
+        padding: 8px 32px 20px;
+      }
+      .nav-mobile-menu.open {
+        display: flex;
+      }
+      .nav-mobile-menu a {
+        padding: 12px 0;
+        font-size: 15px;
+        color: var(--muted);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav-mobile-menu a:last-of-type {
+        border-bottom: none;
+      }
+      .nav-mobile-menu a:hover {
+        color: var(--gold);
+      }
+      .nav-mobile-menu .nav-cta {
+        margin-top: 14px;
+        text-align: center;
       }
 
       /* ---------- HERO ---------- */
@@ -964,13 +1003,19 @@
         .nav-links {
           display: none;
         }
+        .nav-cta {
+          display: none;
+        }
         .nav-toggle {
-          display: block;
+          display: flex;
         }
       }
       @media (max-width: 560px) {
         .wrap {
           padding: 0 20px;
+        }
+        .nav-inner {
+          padding: 16px 20px;
         }
         .kpi-row {
           grid-template-columns: 1fr 1fr 1fr;
@@ -980,6 +1025,9 @@
         }
         .hero-stats {
           gap: 24px;
+        }
+        .hero {
+          padding-top: 128px;
         }
       }
     </style>
@@ -1001,7 +1049,24 @@
           <a href="#contato">Contato</a>
         </nav>
         <a href="#contato" class="nav-cta">Vamos conversar →</a>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Abrir menu"
+          aria-expanded="false"
+          aria-controls="navMobileMenu"
+        >
+          ☰
+        </button>
       </div>
+      <nav class="nav-mobile-menu" id="navMobileMenu">
+        <a href="#sobre">Sobre</a>
+        <a href="#skills">Habilidades</a>
+        <a href="#projetos">Projetos</a>
+        <a href="#formacao">Formação</a>
+        <a href="#contato">Contato</a>
+        <a href="#contato" class="nav-cta">Vamos conversar →</a>
+      </nav>
     </header>
 
     <!-- ================= HERO ================= -->
@@ -1412,6 +1477,24 @@
     </footer>
 
     <script>
+      // mobile nav toggle
+      const navToggle = document.getElementById("navToggle");
+      const navMobileMenu = document.getElementById("navMobileMenu");
+
+      navToggle.addEventListener("click", () => {
+        const isOpen = navMobileMenu.classList.toggle("open");
+        navToggle.textContent = isOpen ? "✕" : "☰";
+        navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      navMobileMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          navMobileMenu.classList.remove("open");
+          navToggle.textContent = "☰";
+          navToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+
       // typewriter effect
       const roles = [
         "Estudante de ADS",
